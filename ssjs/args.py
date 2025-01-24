@@ -23,24 +23,24 @@ class Args:
         if isinstance(obj, tgt):
             return obj
 
-        if caster := Args.casters.get(tgt):
-            try:
-                obj = caster(obj)
-            except Exception as e:
-                msg = f'cast from "{util.otn(obj)}" to "{util.otn(tgt)}" is'
-                msg = f'{msg} not possible: caster "{util.otn(caster)}" fails'
-                raise TypeError(msg) from e
-
-            if isinstance(obj, tgt):
-                return obj
-
+        if not (caster := Args.casters.get(tgt)):
             msg = f'cast from "{util.otn(obj)}" to "{util.otn(tgt)}" is'
-            msg = f'{msg} not possible: caster "{util.otn(caster)}" returns'
-            msg = f'{msg} object of type "{util.otn(obj)}" unexpectedly'
+            msg = f'{msg} not possible: no capable caster exists'
             raise TypeError(msg)
 
+        try:
+            obj = caster(obj)
+        except Exception as e:
+            msg = f'cast from "{util.otn(obj)}" to "{util.otn(tgt)}" is'
+            msg = f'{msg} not possible: caster "{util.otn(caster)}" fails'
+            raise TypeError(msg) from e
+
+        if isinstance(obj, tgt):
+            return obj
+
         msg = f'cast from "{util.otn(obj)}" to "{util.otn(tgt)}" is'
-        msg = f'{msg} not possible: no capable caster exists'
+        msg = f'{msg} not possible: caster "{util.otn(caster)}" returns'
+        msg = f'{msg} object of type "{util.otn(obj)}" unexpectedly'
         raise TypeError(msg)
 
     @staticmethod
