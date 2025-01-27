@@ -27,6 +27,6 @@ jobs:
       run: |
         echo "CD == $(pwd)"
         ls -l
-        cd ..
+        git status
         pytest --rootdir=. -c=test/cfg/pytest.ini
         ls -l
