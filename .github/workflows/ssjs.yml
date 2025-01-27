@@ -26,4 +26,7 @@ jobs:
     - name: tests
       run: |
         echo "CD == $(pwd)"
+        ls -l
+        cd ..
         pytest --rootdir=. -c=test/cfg/pytest.ini
+        ls -l
