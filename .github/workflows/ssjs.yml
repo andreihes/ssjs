@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  pr:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,8 +25,4 @@ jobs:
 
     - name: tests
       run: |
-        echo "CD == $(pwd)"
-        ls -l
-        git status
         pytest --rootdir=. -c=test/cfg/pytest.ini
-        ls -l
