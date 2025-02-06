@@ -40,21 +40,13 @@ def otn(obj: object) -> str:
 
 def scan(name: str) -> typing.Iterator[object]:
     dots = name.replace('/', '.')
-    try:
-        module = importlib.import_module(dots)
-        for member in inspect.getmembers(module):
-            yield member[1]
-    except Exception:
-        pass
+    module = importlib.import_module(dots)
+    for member in inspect.getmembers(module):
+        yield member[1]
 
-    slsh = name.replace('.', '/')
-    for info in pkgutil.iter_modules([slsh]):
-        if info.ispkg:
-            yield from scan(f'{slsh}/{info.name}')
-        else:
-            module = importlib.import_module(f'{dots}.{info.name}')
-            for member in inspect.getmembers(module):
-                yield member[1]
+    slashes = name.replace('.', '/')
+    for info in pkgutil.iter_modules([slashes]):
+        yield from scan(f'{slashes}/{info.name}')
 
 
 def goc(obj: object) -> type | None:

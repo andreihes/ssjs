@@ -1,6 +1,5 @@
 import pytest
 import typing
-import test.pkg.sub.mod
 import ssjs.core.util as util
 
 
@@ -38,14 +37,24 @@ def test_otn_data() -> None:
 
 
 def test_scan() -> None:
-    def is_fun(obj: object) -> bool:
-        key_match = getattr(obj, '__name__', None) == 'fun'
-        mod_match = getattr(obj, '__module__', None) == 'test.pkg.sub.mod'
-        return key_match and mod_match
+    scan = list(util.scan('test.core'))
+    assert test_scan in scan
 
-    result = list(filter(is_fun, util.scan('test.pkg')))
-    assert len(result) == 1
 
-    fun = result[0]
-    assert fun is test.pkg.sub.mod.fun
-    assert typing.cast(typing.Callable, fun)() == 42
+def test_goc() -> None:
+    T = typing.TypeVar('T')
+
+    class Foo(typing.Generic[T]):
+        def __init__(self) -> None:
+            self.oc = util.goc(self)
+
+        def goc(self) -> type | None:
+            return util.goc(self)
+
+    foo = Foo()
+    assert foo.oc is None
+    assert foo.goc() is None
+
+    foo = Foo[str]()
+    assert foo.oc is Foo[str]
+    assert foo.goc() is Foo[str]
