@@ -1,0 +1,28 @@
+name: ssjs
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  pr:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+
+    - name: setup-python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+
+    - name: install
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov
+
+    - name: tests
+      run: |
+        pytest --rootdir=. -c=test/cfg/pytest.ini
