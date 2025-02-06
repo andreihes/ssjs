@@ -1,5 +1,6 @@
 ''' Super Simple Type Depo '''
 
+
 import typing
 import inspect
 import ssjs.core.util as util
@@ -38,6 +39,9 @@ class Depo(typing.Generic[DT]):
             return False
 
         if obj is self.__generic:
+            return False
+
+        if obj in self.__collection:
             return False
 
         self.__collection.add(obj)

@@ -1,3 +1,6 @@
+''' Super Simple Type Cast '''
+
+
 import abc
 
 
